@@ -1,0 +1,354 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="FostanyModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="500" />
+          <Property Name="Mobile" Type="nvarchar" MaxLength="50" />
+          <Property Name="Address" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Invoice_Details">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Invoice_Header_Id" Type="int" />
+          <Property Name="Item_Id" Type="int" />
+          <Property Name="Qty" Type="int" />
+          <Property Name="Price" Type="money" />
+          <Property Name="Total" Type="money" />
+        </EntityType>
+        <EntityType Name="Invoice_Header">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date" Type="datetime" />
+          <Property Name="Number" Type="int" />
+          <Property Name="Customer_Id" Type="int" />
+          <Property Name="Payment_Method_Id" Type="int" />
+          <Property Name="Total" Type="money" />
+          <Property Name="DiscountPercentage" Type="float" />
+          <Property Name="NetTotal" Type="money" />
+        </EntityType>
+        <EntityType Name="Item">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="500" />
+          <Property Name="Price" Type="money" />
+        </EntityType>
+        <EntityType Name="PaymentMethod">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_Invoice_Details_Invoice_Header">
+          <End Role="Invoice_Header" Type="Self.Invoice_Header" Multiplicity="0..1" />
+          <End Role="Invoice_Details" Type="Self.Invoice_Details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Invoice_Header">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Invoice_Details">
+              <PropertyRef Name="Invoice_Header_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Invoice_Details_Item">
+          <End Role="Item" Type="Self.Item" Multiplicity="0..1" />
+          <End Role="Invoice_Details" Type="Self.Invoice_Details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Item">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Invoice_Details">
+              <PropertyRef Name="Item_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Invoice_Header_Customer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+          <End Role="Invoice_Header" Type="Self.Invoice_Header" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Invoice_Header">
+              <PropertyRef Name="Customer_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Invoice_Header_PaymentMethod">
+          <End Role="PaymentMethod" Type="Self.PaymentMethod" Multiplicity="0..1" />
+          <End Role="Invoice_Header" Type="Self.Invoice_Header" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PaymentMethod">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Invoice_Header">
+              <PropertyRef Name="Payment_Method_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="GetNextInvoiceId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetPerInvoiceId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="FostanyModelStoreContainer">
+          <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Invoice_Details" EntityType="Self.Invoice_Details" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Invoice_Header" EntityType="Self.Invoice_Header" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Item" EntityType="Self.Item" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PaymentMethod" EntityType="Self.PaymentMethod" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Invoice_Details_Invoice_Header" Association="Self.FK_Invoice_Details_Invoice_Header">
+            <End Role="Invoice_Header" EntitySet="Invoice_Header" />
+            <End Role="Invoice_Details" EntitySet="Invoice_Details" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Invoice_Details_Item" Association="Self.FK_Invoice_Details_Item">
+            <End Role="Item" EntitySet="Item" />
+            <End Role="Invoice_Details" EntitySet="Invoice_Details" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Invoice_Header_Customer" Association="Self.FK_Invoice_Header_Customer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="Invoice_Header" EntitySet="Invoice_Header" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Invoice_Header_PaymentMethod" Association="Self.FK_Invoice_Header_PaymentMethod">
+            <End Role="PaymentMethod" EntitySet="PaymentMethod" />
+            <End Role="Invoice_Header" EntitySet="Invoice_Header" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="FostanyModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="FostanyEntities" annotation:LazyLoadingEnabled="true">
+          <FunctionImport Name="GetNextInvoiceId" ReturnType="Collection(Int32)">
+          <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetPerInvoiceId" ReturnType="Collection(Int32)">
+          <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="Customers" EntityType="FostanyModel.Customer" />
+          <EntitySet Name="Invoice_Details" EntityType="FostanyModel.Invoice_Details" />
+          <EntitySet Name="Invoice_Header" EntityType="FostanyModel.Invoice_Header" />
+          <EntitySet Name="Items" EntityType="FostanyModel.Item" />
+          <EntitySet Name="PaymentMethods" EntityType="FostanyModel.PaymentMethod" />
+          <AssociationSet Name="FK_Invoice_Header_Customer" Association="FostanyModel.FK_Invoice_Header_Customer">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="Invoice_Header" EntitySet="Invoice_Header" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Invoice_Details_Invoice_Header" Association="FostanyModel.FK_Invoice_Details_Invoice_Header">
+            <End Role="Invoice_Header" EntitySet="Invoice_Header" />
+            <End Role="Invoice_Details" EntitySet="Invoice_Details" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Invoice_Details_Item" Association="FostanyModel.FK_Invoice_Details_Item">
+            <End Role="Item" EntitySet="Items" />
+            <End Role="Invoice_Details" EntitySet="Invoice_Details" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Invoice_Header_PaymentMethod" Association="FostanyModel.FK_Invoice_Header_PaymentMethod">
+            <End Role="PaymentMethod" EntitySet="PaymentMethods" />
+            <End Role="Invoice_Header" EntitySet="Invoice_Header" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Mobile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Invoice_Header" Relationship="FostanyModel.FK_Invoice_Header_Customer" FromRole="Customer" ToRole="Invoice_Header" />
+        </EntityType>
+        <EntityType Name="Invoice_Details">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Invoice_Header_Id" Type="Int32" />
+          <Property Name="Item_Id" Type="Int32" />
+          <Property Name="Qty" Type="Int32" />
+          <Property Name="Price" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Total" Type="Decimal" Precision="19" Scale="4" />
+          <NavigationProperty Name="Invoice_Header" Relationship="FostanyModel.FK_Invoice_Details_Invoice_Header" FromRole="Invoice_Details" ToRole="Invoice_Header" />
+          <NavigationProperty Name="Item" Relationship="FostanyModel.FK_Invoice_Details_Item" FromRole="Invoice_Details" ToRole="Item" />
+        </EntityType>
+        <EntityType Name="Invoice_Header">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="DateTime" Precision="3" />
+          <Property Name="Number" Type="Int32" />
+          <Property Name="Customer_Id" Type="Int32" />
+          <Property Name="Payment_Method_Id" Type="Int32" />
+          <Property Name="Total" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="DiscountPercentage" Type="Double" />
+          <Property Name="NetTotal" Type="Decimal" Precision="19" Scale="4" />
+          <NavigationProperty Name="Customer" Relationship="FostanyModel.FK_Invoice_Header_Customer" FromRole="Invoice_Header" ToRole="Customer" />
+          <NavigationProperty Name="Invoice_Details" Relationship="FostanyModel.FK_Invoice_Details_Invoice_Header" FromRole="Invoice_Header" ToRole="Invoice_Details" />
+          <NavigationProperty Name="PaymentMethod" Relationship="FostanyModel.FK_Invoice_Header_PaymentMethod" FromRole="Invoice_Header" ToRole="PaymentMethod" />
+        </EntityType>
+        <EntityType Name="Item">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Price" Type="Decimal" Precision="19" Scale="4" />
+          <NavigationProperty Name="Invoice_Details" Relationship="FostanyModel.FK_Invoice_Details_Item" FromRole="Item" ToRole="Invoice_Details" />
+        </EntityType>
+        <EntityType Name="PaymentMethod">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Invoice_Header" Relationship="FostanyModel.FK_Invoice_Header_PaymentMethod" FromRole="PaymentMethod" ToRole="Invoice_Header" />
+        </EntityType>
+        <Association Name="FK_Invoice_Header_Customer">
+          <End Type="FostanyModel.Customer" Role="Customer" Multiplicity="0..1" />
+          <End Type="FostanyModel.Invoice_Header" Role="Invoice_Header" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Invoice_Header">
+              <PropertyRef Name="Customer_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Invoice_Details_Invoice_Header">
+          <End Type="FostanyModel.Invoice_Header" Role="Invoice_Header" Multiplicity="0..1" />
+          <End Type="FostanyModel.Invoice_Details" Role="Invoice_Details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Invoice_Header">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Invoice_Details">
+              <PropertyRef Name="Invoice_Header_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Invoice_Details_Item">
+          <End Type="FostanyModel.Item" Role="Item" Multiplicity="0..1" />
+          <End Type="FostanyModel.Invoice_Details" Role="Invoice_Details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Item">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Invoice_Details">
+              <PropertyRef Name="Item_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Invoice_Header_PaymentMethod">
+          <End Type="FostanyModel.PaymentMethod" Role="PaymentMethod" Multiplicity="0..1" />
+          <End Type="FostanyModel.Invoice_Header" Role="Invoice_Header" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PaymentMethod">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Invoice_Header">
+              <PropertyRef Name="Payment_Method_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="FostanyModelStoreContainer" CdmEntityContainer="FostanyEntities">
+          <FunctionImportMapping FunctionImportName="GetNextInvoiceId" FunctionName="FostanyModel.Store.GetNextInvoiceId" />
+          <FunctionImportMapping FunctionImportName="GetPerInvoiceId" FunctionName="FostanyModel.Store.GetPerInvoiceId" />
+          <EntitySetMapping Name="Customers">
+            <EntityTypeMapping TypeName="FostanyModel.Customer">
+              <MappingFragment StoreEntitySet="Customer">
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Invoice_Details">
+            <EntityTypeMapping TypeName="FostanyModel.Invoice_Details">
+              <MappingFragment StoreEntitySet="Invoice_Details">
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="Item_Id" ColumnName="Item_Id" />
+                <ScalarProperty Name="Invoice_Header_Id" ColumnName="Invoice_Header_Id" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Invoice_Header">
+            <EntityTypeMapping TypeName="FostanyModel.Invoice_Header">
+              <MappingFragment StoreEntitySet="Invoice_Header">
+                <ScalarProperty Name="NetTotal" ColumnName="NetTotal" />
+                <ScalarProperty Name="DiscountPercentage" ColumnName="DiscountPercentage" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="Payment_Method_Id" ColumnName="Payment_Method_Id" />
+                <ScalarProperty Name="Customer_Id" ColumnName="Customer_Id" />
+                <ScalarProperty Name="Number" ColumnName="Number" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Items">
+            <EntityTypeMapping TypeName="FostanyModel.Item">
+              <MappingFragment StoreEntitySet="Item">
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PaymentMethods">
+            <EntityTypeMapping TypeName="FostanyModel.PaymentMethod">
+              <MappingFragment StoreEntitySet="PaymentMethod">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

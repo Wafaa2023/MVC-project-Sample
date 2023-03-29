@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="FostanyModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Customer">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="500" />
+    <Property Name="Mobile" Type="nvarchar" MaxLength="50" />
+    <Property Name="Address" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="Invoice_Details">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Invoice_Header_Id" Type="int" />
+    <Property Name="Item_Id" Type="int" />
+    <Property Name="Qty" Type="int" />
+    <Property Name="Price" Type="money" />
+    <Property Name="Total" Type="money" />
+  </EntityType>
+  <EntityType Name="Invoice_Header">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Date" Type="datetime" />
+    <Property Name="Number" Type="int" />
+    <Property Name="Customer_Id" Type="int" />
+    <Property Name="Payment_Method_Id" Type="int" />
+    <Property Name="Total" Type="money" />
+    <Property Name="DiscountPercentage" Type="float" />
+    <Property Name="NetTotal" Type="money" />
+  </EntityType>
+  <EntityType Name="Item">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="500" />
+    <Property Name="Price" Type="money" />
+  </EntityType>
+  <EntityType Name="PaymentMethod">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <Association Name="FK_Invoice_Details_Invoice_Header">
+    <End Role="Invoice_Header" Type="Self.Invoice_Header" Multiplicity="0..1" />
+    <End Role="Invoice_Details" Type="Self.Invoice_Details" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Invoice_Header">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Invoice_Details">
+        <PropertyRef Name="Invoice_Header_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Invoice_Details_Item">
+    <End Role="Item" Type="Self.Item" Multiplicity="0..1" />
+    <End Role="Invoice_Details" Type="Self.Invoice_Details" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Item">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Invoice_Details">
+        <PropertyRef Name="Item_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Invoice_Header_Customer">
+    <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+    <End Role="Invoice_Header" Type="Self.Invoice_Header" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customer">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Invoice_Header">
+        <PropertyRef Name="Customer_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Invoice_Header_PaymentMethod">
+    <End Role="PaymentMethod" Type="Self.PaymentMethod" Multiplicity="0..1" />
+    <End Role="Invoice_Header" Type="Self.Invoice_Header" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PaymentMethod">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Invoice_Header">
+        <PropertyRef Name="Payment_Method_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Function Name="GetNextInvoiceId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="GetPerInvoiceId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="id" Type="int" Mode="In" />
+  </Function>
+  <EntityContainer Name="FostanyModelStoreContainer">
+    <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Invoice_Details" EntityType="Self.Invoice_Details" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Invoice_Header" EntityType="Self.Invoice_Header" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Item" EntityType="Self.Item" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PaymentMethod" EntityType="Self.PaymentMethod" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Invoice_Details_Invoice_Header" Association="Self.FK_Invoice_Details_Invoice_Header">
+      <End Role="Invoice_Header" EntitySet="Invoice_Header" />
+      <End Role="Invoice_Details" EntitySet="Invoice_Details" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Invoice_Details_Item" Association="Self.FK_Invoice_Details_Item">
+      <End Role="Item" EntitySet="Item" />
+      <End Role="Invoice_Details" EntitySet="Invoice_Details" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Invoice_Header_Customer" Association="Self.FK_Invoice_Header_Customer">
+      <End Role="Customer" EntitySet="Customer" />
+      <End Role="Invoice_Header" EntitySet="Invoice_Header" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Invoice_Header_PaymentMethod" Association="Self.FK_Invoice_Header_PaymentMethod">
+      <End Role="PaymentMethod" EntitySet="PaymentMethod" />
+      <End Role="Invoice_Header" EntitySet="Invoice_Header" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
