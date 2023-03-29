@@ -1,0 +1,17 @@
+E:\Projects\SampleProject\SampleProject\SampleProject.DTO\bin\Debug\SampleProject.DTO.dll
+E:\Projects\SampleProject\SampleProject\SampleProject.DTO\bin\Debug\SampleProject.DTO.pdb
+E:\Projects\SampleProject\SampleProject\SampleProject.DTO\obj\Debug\SampleProject.DTO.dll
+E:\Projects\SampleProject\SampleProject\SampleProject.DTO\obj\Debug\SampleProject.DTO.pdb
+E:\Projects\SampleProject\SampleProject\SampleProject.DTO\obj\Debug\SampleProject.DTO.csprojResolveAssemblyReference.cache
+C:\Users\FOLA\Desktop\SampleProject\SampleProject.DTO\bin\Debug\SampleProject.DTO.dll
+C:\Users\FOLA\Desktop\SampleProject\SampleProject.DTO\bin\Debug\SampleProject.DTO.pdb
+C:\Users\FOLA\Desktop\SampleProject\SampleProject.DTO\bin\Debug\Project.Model.dll
+C:\Users\FOLA\Desktop\SampleProject\SampleProject.DTO\bin\Debug\Project.Core.dll
+C:\Users\FOLA\Desktop\SampleProject\SampleProject.DTO\bin\Debug\EntityFramework.dll
+C:\Users\FOLA\Desktop\SampleProject\SampleProject.DTO\bin\Debug\Project.Model.pdb
+C:\Users\FOLA\Desktop\SampleProject\SampleProject.DTO\bin\Debug\Project.Core.pdb
+C:\Users\FOLA\Desktop\SampleProject\SampleProject.DTO\bin\Debug\EntityFramework.xml
+C:\Users\FOLA\Desktop\SampleProject\SampleProject.DTO\obj\Debug\SampleProject.DTO.csprojResolveAssemblyReference.cache
+C:\Users\FOLA\Desktop\SampleProject\SampleProject.DTO\obj\Debug\SampleProject.DTO.dll
+C:\Users\FOLA\Desktop\SampleProject\SampleProject.DTO\obj\Debug\SampleProject.DTO.pdb
+C:\Users\FOLA\Desktop\SampleProject\SampleProject.DTO\bin\Debug\SampleProject.DTO.dll.config
